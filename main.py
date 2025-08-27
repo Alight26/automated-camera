@@ -4,12 +4,15 @@ import numpy as np
 face_cascade = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv.CascadeClassifier('haarcascade_eye.xml')
 # smile cascade
-smile_cascade = cv.CascadeClassifier('haarcascade_smile.xml')
+smile_cascade = cv.CascadeClassifier('haarcascade_smile1.xml')
 
 cap = cv.VideoCapture(0)
 
 while True:
     ret, img = cap.read()
+    if not ret or img is None:
+        print("Failed to grab frame")
+        break
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
     for (x,y,w,h) in faces:
@@ -24,14 +27,15 @@ while True:
             cv.rectangle(roi_color, (ex,ey), (ex+ew, ey+eh), (0, 255, 0), 2)
             
 
-        smile = smile_cascade.detectMultiScale(roi_gray)
+        smile = smile_cascade.detectMultiScale(roi_gray, 1.3, 100)
         for (sx,sy,sw,sh) in smile:
             cv.rectangle(roi_color, (sx,sy), (sx+sw, sy+sh), (0, 0, 255), 2)
 
 
-        cv.imshow('img', img)
-        k = cv.waitKey(30) & 0xff
-        if k == ord('q'):
-            break 
+    cv.imshow('img', img)
+    k = cv.waitKey(30) & 0xff
+    if k == ord('q'):
+        break
+
 cap.release()
 cv.destroyAllWindows()
