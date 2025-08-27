@@ -30,12 +30,20 @@ while True:
         smile = smile_cascade.detectMultiScale(roi_gray, 1.3, 100)
         for (sx,sy,sw,sh) in smile:
             cv.rectangle(roi_color, (sx,sy), (sx+sw, sy+sh), (0, 0, 255), 2)
+            cv.imwrite("imagecaptured.png", img)
+            cv.waitKey(0)
+
+
+
 
 
     cv.imshow('img', img)
     k = cv.waitKey(30) & 0xff
     if k == ord('q'):
         break
+
+
+
 
 cap.release()
 cv.destroyAllWindows()
